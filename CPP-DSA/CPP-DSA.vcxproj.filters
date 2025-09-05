@@ -13,10 +13,16 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Data Structures">
+      <UniqueIdentifier>{c6d1fca5-23d9-4bb6-921f-688c5753f2bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data Structures\LinkedList">
+      <UniqueIdentifier>{49025c8b-7230-415e-8169-3af9286c27a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DSLinkedList.cpp">
+      <Filter>Source Files\Data Structures\LinkedList</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

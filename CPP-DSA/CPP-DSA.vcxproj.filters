@@ -14,15 +14,15 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Source Files\Data Structures">
-      <UniqueIdentifier>{c6d1fca5-23d9-4bb6-921f-688c5753f2bf}</UniqueIdentifier>
+      <UniqueIdentifier>{8fa95d76-c3a5-481c-abc4-ca920d786cb7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Data Structures\LinkedList">
-      <UniqueIdentifier>{49025c8b-7230-415e-8169-3af9286c27a2}</UniqueIdentifier>
+    <Filter Include="Source Files\Data Structures\Linked List">
+      <UniqueIdentifier>{4838457c-55bf-4c20-b922-a757ead99e77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DSLinkedList.cpp">
-      <Filter>Source Files\Data Structures\LinkedList</Filter>
+    <ClCompile Include="Data Structures\Linked List\DSLinkedList.cpp">
+      <Filter>Source Files\Data Structures\Linked List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

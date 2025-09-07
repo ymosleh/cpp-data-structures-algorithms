@@ -13,25 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Data Structures">
-      <UniqueIdentifier>{8fa95d76-c3a5-481c-abc4-ca920d786cb7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Data Structures\Linked List">
-      <UniqueIdentifier>{4838457c-55bf-4c20-b922-a757ead99e77}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Data Structures\Linked List\headers">
-      <UniqueIdentifier>{872cecc0-39d6-4c88-abcc-ab651ec6bfa3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Data Structures\Linked List\source">
-      <UniqueIdentifier>{53bfcb89-637d-4c94-8549-d69eb4dfedd3}</UniqueIdentifier>
+    <Filter Include="Source Files\LinkedList">
+      <UniqueIdentifier>{b36a4e1f-f59b-4a20-9ff1-04ecc2384f03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Data Structures\Linked List\main.cpp" />
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Data Structures\Linked List\DSLinkedList.h">
-      <Filter>Source Files\Data Structures\Linked List\headers</Filter>
+    <ClInclude Include="LinkedList\DSLinkedList.h">
+      <Filter>Source Files\LinkedList</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

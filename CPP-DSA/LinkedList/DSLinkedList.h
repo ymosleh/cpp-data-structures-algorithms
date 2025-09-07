@@ -34,7 +34,6 @@ public:
 
 	void append(const T& v) {
 		auto newNode = std::make_unique<DataNode<T>>(v);
-
 		if (!head) {
 			head = std::move(newNode);
 			tail = head.get();
@@ -44,6 +43,19 @@ public:
 			tail = tail->next.get();
 		}
 		++len;
+	}
+
+	void prepend(const T& v) {
+		auto newNode = std::make_unique<DataNode<T>>(v); 
+		if (!head) {
+			head = std::move(newNode);
+			tail = head.get();
+		}
+		else {
+			auto nextNode = head.get();
+			head = std::move(newNode);
+			head->next = nextNode;
+		}
 	}
 
 	void deleteLast() {

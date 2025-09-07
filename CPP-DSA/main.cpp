@@ -1,4 +1,5 @@
-#include ""
+#include "DSLinkedList.h"
+
 
 int main() {
 
@@ -8,30 +9,30 @@ int main() {
 	intList.append(5);
 	intList.append(67);
 	intList.printList();
-	cout << "List size: " << intList.size() << endl;
+	std::cout << "List size: " << intList.size() << std::endl;
 	intList.deleteLast();
 	intList.deleteLast();
 	intList.printList();
-	cout << "List size: " << intList.size() << endl;
+	std::cout << "List size: " << intList.size() << std::endl;
 
-	cout << "\n--- String Example ---\n";
+	std::cout << "\n--- String Example ---\n";
 
 	// Example with strings
-	DSLinkedList<string> stringList("Hello");
+	DSLinkedList<std::string> stringList("Hello");
 	stringList.append("World");
 	stringList.append("Template");
 	stringList.append("Example");
 	stringList.printList();
-	cout << "String list size: " << stringList.size() << endl;
+	std::cout << "String list size: " << stringList.size() << std::endl;
 
-	cout << "\n--- Double Example ---\n";
+	std::cout << "\n--- Double Example ---\n";
 
 	// Example with doubles
 	DSLinkedList<double> doubleList(3.14);
 	doubleList.append(2.71);
 	doubleList.append(1.41);
 	doubleList.printList();
-	cout << "Double list size: " << doubleList.size() << endl;
+	std::cout << "Double list size: " << doubleList.size() << std::endl;
 
 	return 0;
 }

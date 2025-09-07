@@ -52,10 +52,10 @@ public:
 			tail = head.get();
 		}
 		else {
-			auto nextNode = head.get();
+			newNode->next = std::move(head);
 			head = std::move(newNode);
-			head->next = nextNode;
 		}
+		++len;
 	}
 
 	void deleteLast() {

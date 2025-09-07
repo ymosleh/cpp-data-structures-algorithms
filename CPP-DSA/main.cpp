@@ -9,9 +9,12 @@ int main() {
 	intList.append(5);
 	intList.append(67);
 	intList.printList();
+	intList.deleteLast();
 	std::cout << "List size: " << intList.size() << std::endl;
-	intList.deleteLast();
-	intList.deleteLast();
+
+	intList.prepend(900);
+	intList.prepend(7000);
+
 	intList.printList();
 	std::cout << "List size: " << intList.size() << std::endl;
 

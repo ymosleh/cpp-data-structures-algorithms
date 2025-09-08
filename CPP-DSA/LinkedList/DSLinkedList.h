@@ -3,10 +3,9 @@
 #include <iostream>
 #include <memory>
 
-//using namespace std;
 
+/* Template node for linked list elements.*/ 
 
-// Template node for linked list elements
 template <typename T>
 class DataNode {
 public:
@@ -15,25 +14,25 @@ public:
 	DataNode(const T& v) : value(v), next(nullptr) {}
 };
 
-// Singly linked list with tail pointer for O(1) append
+// Singly linked list with tail pointer for O(1) append.
 template <typename T>
 class DSLinkedList {
 private:
 	std::unique_ptr<DataNode<T>> head{nullptr};
 	DataNode<T>* tail{ nullptr }; // raw pointer, since tail is not responsible for the object lifetime.
-	int len{};
+	int length{};
 
 public:
-	DSLinkedList() : head(nullptr), tail(nullptr), len(0) {}
+	DSLinkedList() : head(nullptr), tail(nullptr), length(0) {}
 
-	DSLinkedList(const T& v) {
-		head = std::make_unique<DataNode<T>>(v);
+	DSLinkedList(const T& value) {
+		head = std::make_unique<DataNode<T>>(value);
 		tail = head.get();
-		len = 1;
+		length = 1;
 	}
 
-	void append(const T& v) {
-		auto newNode = std::make_unique<DataNode<T>>(v);
+	void append(const T& value) {
+		auto newNode = std::make_unique<DataNode<T>>(value);
 		if (!head) {
 			head = std::move(newNode);
 			tail = head.get();
@@ -42,11 +41,11 @@ public:
 			tail->next = std::move(newNode);
 			tail = tail->next.get();
 		}
-		++len;
+		++length;
 	}
 
-	void prepend(const T& v) {
-		auto newNode = std::make_unique<DataNode<T>>(v); 
+	void prepend(const T& value) {
+		auto newNode = std::make_unique<DataNode<T>>(value);
 		if (!head) {
 			head = std::move(newNode);
 			tail = head.get();
@@ -55,46 +54,122 @@ public:
 			newNode->next = std::move(head);
 			head = std::move(newNode);
 		}
-		++len;
+		++length;
 	}
 
 	void deleteLast() {
 		if (!head) {
-			std::cout << "List empty, nothing to delete" << std::endl;
 			return;
 		}
 
-		// Single element
-		if (head->next == nullptr) {
+		if (!head->next) {
 			head.reset(); // Deletes node and set head to nullptr.
 			tail = nullptr;
-			len = 0;
+			length = 0;
 			return;
 		}
 
-		// Find the second to last to last node.
 		auto prev = head.get();
 		while (prev->next.get() != tail) {
 			prev = prev->next.get();
 		}
 		prev->next.reset();
 		tail = prev;
-		--len;
+		--length;
+	}
+
+	void deleteFirst() {
+		if (!head) {
+			return;
+		}
+
+		if (length == 1) {
+			head.reset();
+			tail = nullptr;
+		}
+		else {
+			head = std::move(head->next);
+		}
+		--length;
+	}
+
+	DataNode<T>* get(int index) {
+		if (index < 0 || index >= length) {
+			return nullptr;
+		}
+
+		auto current = head.get();
+		for (int i = 0; i < index; ++i) {
+			current = current->next.get();
+		}
+		return current;
+	}
+
+	bool set(int index, const T& value) {
+		auto current = get(index);
+		if (current) {
+			current->value = value;
+			return true;
+		}
+		return false;
+	}
+
+	bool insert(int index, const T& value) {
+		if (index < 0 || index > length) {
+			return false;
+		}
+		if (index == 0) {
+			prepend(value);
+			return true;
+
+		}
+		if (index == length) {
+			append(value);
+			return true;
+
+		}
+
+		auto newNode = std::make_unique<DataNode<T>> (value);
+		auto current = get(index - 1);
+		newNode->next = std::move(current->next);
+		current->next = std::move(newNode);
+
+		++length;
+		return true;
+	}
+
+	void removeAt(int index) {
+		if (index < 0 || index >= length) {
+			return;
+		}
+		if (index == 0) {
+			deleteFirst();
+			return;
+		}
+		if (index == length - 1) {
+			deleteLast();
+			return;
+		}
+
+		auto prev = get(index - 1);
+		prev->next = std::move(prev->next->next); // Reassigning prev->next destroys the old unique_ptr, automatically deleting the target node.
+		--length;
 	}
 
 	void printList() const {
 		if (!head) {
-			std::cout << "Empty list, nothing to print" << std::endl;
 			return;
 		}
 
 		auto iter = head.get();
 		while (iter) {
-			std::cout << "Value: " << iter->value << std::endl;
+			std::cout << iter->value;
+			if (iter->next) std::cout << " -> ";
 			iter = iter->next.get();
 		}
-
+		std::cout << std::endl;
 	}
 
-	int size() const { return len; }
+
+	int size() const { return length; }
 };

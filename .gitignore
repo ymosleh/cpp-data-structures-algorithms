@@ -1,0 +1,13 @@
+# Visual Studio user-specific files
+*.vcxproj.user
+
+# VS local cache
+.vs/
+
+# Build output
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/

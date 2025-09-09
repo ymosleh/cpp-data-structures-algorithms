@@ -5,7 +5,6 @@
 
 
 /* Template node for linked list elements.*/ 
-
 template <typename T>
 class DataNode {
 public:
@@ -170,6 +169,26 @@ public:
 		std::cout << std::endl;
 	}
 
-
 	int size() const { return length; }
+
+	/* Algorithms */
+
+	// Leetcode 206. Reverse Linked List.
+	void reverse() {
+		if (!head || !head->next) return;
+
+		std::unique_ptr<DataNode<T>> prev = nullptr; 
+		auto current = std::move(head);
+		tail = current.get(); // Remember the old head (which will become the new tail).
+
+		while (current) {
+			auto nextNode = std::move(current->next);
+			current->next = std::move(prev);
+			prev = std::move(current);
+			current = std::move(nextNode);
+		}
+		head = std::move(prev);
+		
+	}
+
 };

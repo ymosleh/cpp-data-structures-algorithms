@@ -50,5 +50,13 @@ int main() {
     doubleList.printList();
     std::cout << "List size: " << doubleList.size() << "\n\n";
 
+
+    std::cout << "--- Algorithms Reverse List---\n";
+    doubleList.printList();
+    doubleList.reverse();
+    std::cout << "Reverse: ";
+    doubleList.printList();
+
+
     return 0;
 }

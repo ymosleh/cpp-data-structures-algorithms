@@ -1,10 +1,14 @@
 #pragma once
-
 #include <iostream>
 #include <memory>
 
+/* Linked list template using smart pointers. */ 
 
-/* Template node for linked list elements.*/ 
+/// <summary>
+/// Node of a singly linked list.
+/// Owns the next node via unique_ptr to enforce single ownership.
+/// </summary>
+/// <typeparam name="T"> Type stored in the list.</typeparam>
 template <typename T>
 class DataNode {
 public:
@@ -13,7 +17,10 @@ public:
 	DataNode(const T& v) : value(v), next(nullptr) {}
 };
 
-// Singly linked list with tail pointer for O(1) append.
+/// <summary>
+/// Singly linked list implementation using smart pointers.
+/// Maintains O(1) append with a non-owning raw tail pointer.
+/// </summary>
 template <typename T>
 class DSLinkedList {
 private:
@@ -30,6 +37,11 @@ public:
 		length = 1;
 	}
 
+	/// <summary>
+	/// Appends an element to the end of the list in O(1).
+	/// Uses tail pointer for efficiency.
+	/// </summary>
+	/// <param name="value"> The value to store in the newly created tail node. </param>
 	void append(const T& value) {
 		auto newNode = std::make_unique<DataNode<T>>(value);
 		if (!head) {
@@ -43,6 +55,10 @@ public:
 		++length;
 	}
 
+	/// <summary>
+	/// Prepend element to the start of the list in O(1).
+	/// </summary>
+	/// <param name="value"> The value to store in the new head node. </param>
 	void prepend(const T& value) {
 		auto newNode = std::make_unique<DataNode<T>>(value);
 		if (!head) {
@@ -56,6 +72,10 @@ public:
 		++length;
 	}
 
+	/// <summary>
+	/// Delete the last node.
+	/// Traverses the list to find the node before tail O(n).
+	/// </summary>
 	void deleteLast() {
 		if (!head) {
 			return;
@@ -77,6 +97,9 @@ public:
 		--length;
 	}
 
+	/// <summary>
+	/// Delete the first node in O(1).
+	/// </summary>
 	void deleteFirst() {
 		if (!head) {
 			return;
@@ -92,6 +115,13 @@ public:
 		--length;
 	}
 
+
+	/// <summary>
+	/// Returns the node at the given index. Returns nullptr if out of range.
+	/// Time: O(n).
+	/// </summary>
+	/// <param name="index"> Zero-based index of the node to retrieve. </param>
+	/// <returns> Pointer to the node if valid, otherwise nullptr. </returns>
 	DataNode<T>* get(int index) {
 		if (index < 0 || index >= length) {
 			return nullptr;
@@ -104,6 +134,13 @@ public:
 		return current;
 	}
 
+
+	/// <summary>
+	/// Set the value of the node at given index.
+	/// </summary>
+	/// <param name="index"> Zero-based index of the node whose value will be updated. </param>
+	/// <param name="value"> The new value to assign to the node. </param>
+	/// <returns> True if the node value was successfully updated; false if the index was invalid. </returns>
 	bool set(int index, const T& value) {
 		auto current = get(index);
 		if (current) {
@@ -113,6 +150,12 @@ public:
 		return false;
 	}
 
+	/// <summary>
+	/// Inserts a new node at the specified index. Supports insert at head, tail, or middle.
+	/// </summary>
+	/// <param name="index"> Zero-based position where the new node will be inserted. </param>
+	/// <param name="value"> The value to store in the newly inserted node. </param>
+	/// <returns> True if the node was successfully inserted; false if the index was invalid. </returns>
 	bool insert(int index, const T& value) {
 		if (index < 0 || index > length) {
 			return false;
@@ -137,6 +180,12 @@ public:
 		return true;
 	}
 
+	/// <summary>
+	/// Remove the node at the given index.
+	/// Relinks nodes by reassigning unique_ptr ownership, which automatically deletes the removed node.
+	/// Time: O(n).
+	/// </summary>
+	/// <param name="index"> Zero-based index of the node to remove. </param>
 	void removeAt(int index) {
 		if (index < 0 || index >= length) {
 			return;
@@ -171,9 +220,13 @@ public:
 
 	int size() const { return length; }
 
-	/* Algorithms */
 
-	// Leetcode 206. Reverse Linked List.
+	/*** Linked list Algorithms ***/
+
+	/// <summary>
+	/// Reverse the list in-place.
+	/// Time: O(n) | Space: O(1).
+	/// </summary>
 	void reverse() {
 		if (!head || !head->next) return;
 
@@ -187,8 +240,52 @@ public:
 			prev = std::move(current);
 			current = std::move(nextNode);
 		}
-		head = std::move(prev);
-		
+		head = std::move(prev);		
+	}
+
+	/// <summary>
+	/// Returns the middle node of the list using the slow/fast pointer technique.
+	/// For even-length lists, returns the second middle node.
+	/// Time: O(n) | Space: O(1).
+	/// </summary>
+	/// <returns>  Pointer to the middle node if the list is non-empty; otherwise nullptr. </returns>
+	DataNode<T>* findMiddle()  {
+		if (!head || !head->next) return head.get();
+
+		auto* slow = head.get();
+		auto* fast = head.get();
+		while (fast && fast->next) {
+			fast = fast->next->next.get();
+			slow = slow->next.get();
+		}
+		return slow;
+	}
+
+	/// <summary>
+	/// Find the k-th node from the end (tail).
+	/// Constraints: Cannot use length variable.
+	/// Time: O(n).
+	/// </summary>
+	/// <param name="k"> Zero-based index from the end. </param>
+	/// <returns> Pointer to the node if valid; otherwise nullptr. </returns>
+	DataNode<T>* findKthNodeFromEnd(int k) {
+		if (!head) return nullptr;
+
+		auto* fast = head.get();
+		auto* slow = head.get();
+
+		// Move fast 'k' steps ahead. When fast gets to end of list slow will be pointing to the kth element from the end.
+		for (int i = 0; i < k; ++i) {
+			if (!fast) return nullptr;
+			fast = fast->next.get();
+		}
+
+		while (fast) {
+			slow = slow->next.get();
+			fast = fast->next.get();
+		}
+		return slow;
+
 	}
 
 };

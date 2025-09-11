@@ -26,5 +26,8 @@
     <ClInclude Include="LinkedList\DSLinkedList.h">
       <Filter>Source Files\LinkedList</Filter>
     </ClInclude>
+    <ClInclude Include="testUtils.h">
+      <Filter>Source Files\LinkedList</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

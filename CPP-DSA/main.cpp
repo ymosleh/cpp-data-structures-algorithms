@@ -1,8 +1,9 @@
 #include "DSLinkedList.h"
+#include "testUtils.h"
 #include <string>
-#include <iostream>
 
-int main() {
+
+int main(int argc, char * argv[]) {
     std::cout << "--- Integer List Example ---\n";
     DSLinkedList<int> intList(1);
     intList.append(2);
@@ -33,7 +34,6 @@ int main() {
 
     std::cout << "List size: " << intList.size() << "\n\n";
 
-    // --------------------------------------------------------
     std::cout << "--- String List Example ---\n";
     DSLinkedList<std::string> stringList("Hello");
     stringList.append("World");
@@ -42,7 +42,6 @@ int main() {
     stringList.printList();
     std::cout << "List size: " << stringList.size() << "\n\n";
 
-    // --------------------------------------------------------
     std::cout << "--- Double List Example ---\n";
     DSLinkedList<double> doubleList(3.14);
     doubleList.append(2.71);
@@ -51,12 +50,24 @@ int main() {
     std::cout << "List size: " << doubleList.size() << "\n\n";
 
 
-    std::cout << "--- Algorithms Reverse List---\n";
-    doubleList.printList();
+    std::cout << "--- Reverse List ---\n";
     doubleList.reverse();
-    std::cout << "Reverse: ";
-    doubleList.printList();
+    
+    DSLinkedList<int> nums(1);
+    nums.append(2);
+    nums.append(3);
+    nums.append(4);
+    nums.append(5);
+    nums.printList();
 
+    std::cout << "--- Middle node ---\n";
+    std::cout << nums.findMiddle()->value << std::endl;
+
+    testCycleDetection();
+
+    std::cout << "--- Find the Kth Node from end ---\n";
+    std::cout << nums.findKthNodeFromEnd(2)->value << std::endl;
 
     return 0;
 }
+

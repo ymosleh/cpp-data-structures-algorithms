@@ -266,7 +266,7 @@ public:
 	/// Constraints: Cannot use length variable.
 	/// Time: O(n).
 	/// </summary>
-	/// <param name="k"> Zero-based index from the end. </param>
+	/// <param name="k"> One-based index from the end (k = 1 returns the last node, k = 2 the second to last, etc.). </param>
 	/// <returns> Pointer to the node if valid; otherwise nullptr. </returns>
 	DataNode<T>* findKthNodeFromEnd(int k) {
 		if (!head) return nullptr;

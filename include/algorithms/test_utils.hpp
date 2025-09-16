@@ -64,5 +64,8 @@ inline void testCycleDetection() {
 
     // Clean up: break cycle before deleting nodes.
     node4->next = nullptr;
-    delete node1; delete node2; delete node3; delete node4;
+    delete node1;
+    delete node2;
+    delete node3;
+    delete node4;
 }

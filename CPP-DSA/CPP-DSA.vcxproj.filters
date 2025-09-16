@@ -13,21 +13,5 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\LinkedList">
-      <UniqueIdentifier>{b36a4e1f-f59b-4a20-9ff1-04ecc2384f03}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="LinkedList\DSLinkedList.h">
-      <Filter>Source Files\LinkedList</Filter>
-    </ClInclude>
-    <ClInclude Include="testUtils.h">
-      <Filter>Source Files\LinkedList</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

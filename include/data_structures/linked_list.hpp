@@ -13,7 +13,7 @@ template <typename T>
 class DataNode {
 public:
 	T value{};
-	std::unique_ptr<DataNode<T>> next{ nullptr };
+	std::unique_ptr<DataNode<T>> next{nullptr};
 	DataNode(const T& v) : value(v), next(nullptr) {}
 };
 
@@ -25,7 +25,7 @@ template <typename T>
 class DSLinkedList {
 private:
 	std::unique_ptr<DataNode<T>> head{nullptr};
-	DataNode<T>* tail{ nullptr }; // raw pointer, since tail is not responsible for the object lifetime.
+	DataNode<T>* tail{nullptr}; // raw pointer, since tail is not responsible for the object lifetime.
 	int length{};
 
 public:
@@ -163,15 +163,13 @@ public:
 		if (index == 0) {
 			prepend(value);
 			return true;
-
 		}
 		if (index == length) {
 			append(value);
 			return true;
-
 		}
 
-		auto newNode = std::make_unique<DataNode<T>> (value);
+		auto newNode = std::make_unique<DataNode<T>>(value);
 		auto current = get(index - 1);
 		newNode->next = std::move(current->next);
 		current->next = std::move(newNode);
@@ -240,7 +238,7 @@ public:
 			prev = std::move(current);
 			current = std::move(nextNode);
 		}
-		head = std::move(prev);		
+		head = std::move(prev);
 	}
 
 	/// <summary>
@@ -248,9 +246,9 @@ public:
 	/// For even-length lists, returns the second middle node.
 	/// Time: O(n) | Space: O(1).
 	/// </summary>
-	/// <returns>  Pointer to the middle node if the list is non-empty; otherwise nullptr. </returns>
-	DataNode<T>* findMiddle()  {
-		if (!head || !head->next) return head.get();
+	/// <returns> Pointer to the middle node if the list is non-empty; otherwise nullptr. </returns>
+	DataNode<T>* findMiddle() {
+		if (!head) return nullptr;
 
 		auto* slow = head.get();
 		auto* fast = head.get();
@@ -269,7 +267,7 @@ public:
 	/// <param name="k"> One-based index from the end (k = 1 returns the last node, k = 2 the second to last, etc.). </param>
 	/// <returns> Pointer to the node if valid; otherwise nullptr. </returns>
 	DataNode<T>* findKthNodeFromEnd(int k) {
-		if (!head) return nullptr;
+		if (k <= 0 || !head) return nullptr;
 
 		auto* fast = head.get();
 		auto* slow = head.get();
@@ -285,7 +283,81 @@ public:
 			fast = fast->next.get();
 		}
 		return slow;
+	}
 
+	/// <summary>
+	/// Removes all duplicate nodes such that each element appears only once.
+	/// Time: O(N) | Space O(1)
+	/// </summary>
+	void removeDuplicatesFromSortedList() {
+		auto* current = head.get();
+		while (current && current->next) {
+			if (current->value == current->next->value) {
+				std::unique_ptr<DataNode<T>> temp = std::move(current->next); // Take ownership of duplicate node to delete.
+				current->next = std::move(temp->next);
+				--length;
+			} else {
+				current = current->next.get();
+			}
+		}
+	}
+
+	/// <summary>
+	/// Converts binary sequence into a decimal value.
+	/// Constraints: Each node's value is either 0 or 1.
+	/// Time: O(N) | Space: O(1)
+	/// </summary>
+	/// <param name="h"></param>
+	/// <returns></returns>
+	int binaryToDecimal() {
+		int result = 0;
+		auto* current = head.get();
+		while (current) {
+			result = result << 1 | current->value;
+			current = current->next.get();
+		}
+		return result;
+	}
+
+	/// <summary>
+	/// Implemtation for Leetcode :
+	/// Given the head of a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+	/// You should preserve the original relative order of the nodes in each of the two partitions.
+	/// Time : O(N) | Space : O(1)
+	/// </summary>
+	/// <returns> Pointer to the node if valid; otherwise nullptr. </returns>
+	DataNode<T>* partitionList(int x) {
+		if (!head) return nullptr;
+		auto beforeList = std::make_unique<DataNode<T>>(-1);
+		auto afterList  = std::make_unique<DataNode<T>>(-1);
+		auto* before = beforeList.get();
+		auto* after  = afterList.get();
+		
+		auto current = std::move(head); // Take ownership of head since we need to detach and reattach nodes.
+		while (current) {
+			auto nextNode = std::move(current->next); // save next pointer that links to the rest of the list.
+			if (current->value < x) {
+				before->next = std::move(current);
+				before = before->next.get();
+			}
+			else {
+				after->next = std::move(current);
+				after = after->next.get();
+			}
+			current = std::move(nextNode); 
+		}
+		after->next = nullptr; // cut off "after list" to avoid cycles.
+		before->next = std::move(afterList->next); 
+		head = std::move(beforeList->next);
+
+		// recalculate tail pointer here. 
+		tail = head.get();
+		while (tail && tail->next) {
+			tail = tail->next.get();
+		}
+
+		return head.get();
 	}
 
 };
+

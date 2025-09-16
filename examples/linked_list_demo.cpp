@@ -1,5 +1,5 @@
-#include "DSLinkedList.h"
-#include "testUtils.h"
+#include "data_structures/linked_list.hpp"
+#include "algorithms/test_utils.hpp"
 #include <string>
 
 
@@ -52,21 +52,60 @@ int main(int argc, char * argv[]) {
 
     std::cout << "--- Reverse List ---\n";
     doubleList.reverse();
-    
+    doubleList.printList();
+
+    std::cout << "--- Middle node ---\n";
     DSLinkedList<int> nums(1);
     nums.append(2);
     nums.append(3);
     nums.append(4);
-    nums.append(5);
+    //nums.append(5);
     nums.printList();
 
-    std::cout << "--- Middle node ---\n";
-    std::cout << nums.findMiddle()->value << std::endl;
+
+    std::cout << "Middle Node: " << nums.findMiddle()->value << std::endl;
 
     testCycleDetection();
 
     std::cout << "--- Find the Kth Node from end ---\n";
-    std::cout << nums.findKthNodeFromEnd(2)->value << std::endl;
+    std::cout << "Kth node: " << nums.findKthNodeFromEnd(2)->value << std::endl;
+
+    std::cout << "--- Find and remove duplicates ---\n";
+    DSLinkedList<int> dupes(1);
+    dupes.append(2);
+    dupes.append(3);
+    dupes.append(4);
+    dupes.append(5);
+
+    std::cout << "List with duplicates: " << std::endl;
+    dupes.printList();
+    std::cout << "size: " << dupes.size() << std::endl;
+
+    dupes.removeDuplicatesFromSortedList();
+
+    std::cout << "List after removing duplicates: " << std::endl;
+    dupes.printList();
+    std::cout << "size: " << dupes.size() << std::endl;
+
+    DSLinkedList<int> binarySeq(1);
+    binarySeq.append(0);
+    binarySeq.append(1);
+    std::cout << "--- binary to decimal ---\n";
+    binarySeq.printList();
+    std::cout << "Decimal value: " << binarySeq.binaryToDecimal() << std::endl;
+
+    std::cout << "--- Partition List ---\n";
+    DSLinkedList<int> ListToPart(1);
+    ListToPart.append(4);
+    ListToPart.append(3);
+    ListToPart.append(2);
+    ListToPart.append(5);
+    ListToPart.append(2);
+
+    int x = 3;
+    ListToPart.partitionList(x);
+    std::cout << "Partitioned List based on X: " << x << std::endl;
+    ListToPart.printList();
 
     return 0;
 }

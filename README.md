@@ -15,9 +15,8 @@ cpp-data-structures-algorithms/
 ├── examples/
 │   └── linked_list_demo.cpp   # Demonstration of linked list operations
 ├── tests/                     # Future unit tests
-├── src/                       # Future source files
 ├── docs/                      # Documentation
-├── CMakeLists.txt            # Cross-platform build configuration
+├── CMakeLists.txt             # Cross-platform build configuration
 └── README.md
 ```
 

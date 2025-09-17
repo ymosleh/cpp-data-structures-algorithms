@@ -37,6 +37,56 @@ public:
 		length = 1;
 	}
 
+	// Destructor
+	~DSLinkedList() = default;
+
+	// Copy constructor
+	DSLinkedList(const DSLinkedList& other) : head(nullptr), tail(nullptr), length(0) {
+		auto* current = other.head.get();
+		while (current) {
+			append(current->value);
+			current = current->next.get();
+		}
+	}
+
+	// Copy assignment operator
+	DSLinkedList& operator=(const DSLinkedList& other) {
+		if (this != &other) {
+			// Clear current list
+			head.reset();
+			tail = nullptr;
+			length = 0;
+
+			// Copy from other
+			auto* current = other.head.get();
+			while (current) {
+				append(current->value);
+				current = current->next.get();
+			}
+		}
+		return *this;
+	}
+
+	// Move constructor
+	DSLinkedList(DSLinkedList&& other) noexcept
+		: head(std::move(other.head)), tail(other.tail), length(other.length) {
+		other.tail = nullptr;
+		other.length = 0;
+	}
+
+	// Move assignment operator
+	DSLinkedList& operator=(DSLinkedList&& other) noexcept {
+		if (this != &other) {
+			head = std::move(other.head);
+			tail = other.tail;
+			length = other.length;
+
+			other.tail = nullptr;
+			other.length = 0;
+		}
+		return *this;
+	}
+
 	/// <summary>
 	/// Appends an element to the end of the list in O(1).
 	/// Uses tail pointer for efficiency.
@@ -296,6 +346,10 @@ public:
 				std::unique_ptr<DataNode<T>> temp = std::move(current->next); // Take ownership of duplicate node to delete.
 				current->next = std::move(temp->next);
 				--length;
+				// Update tail pointer if we removed the tail node
+				if (!current->next) {
+					tail = current;
+				}
 			} else {
 				current = current->next.get();
 			}
@@ -307,8 +361,7 @@ public:
 	/// Constraints: Each node's value is either 0 or 1.
 	/// Time: O(N) | Space: O(1)
 	/// </summary>
-	/// <param name="h"></param>
-	/// <returns></returns>
+	/// <returns> The decimal representation of the binary sequence.</returns>
 	int binaryToDecimal() {
 		int result = 0;
 		auto* current = head.get();
@@ -320,16 +373,17 @@ public:
 	}
 
 	/// <summary>
-	/// Implemtation for Leetcode :
+	/// Implementation for LeetCode problem:
 	/// Given the head of a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
 	/// You should preserve the original relative order of the nodes in each of the two partitions.
-	/// Time : O(N) | Space : O(1)
+	/// Time: O(N) | Space: O(1)
 	/// </summary>
-	/// <returns> Pointer to the node if valid; otherwise nullptr. </returns>
-	DataNode<T>* partitionList(int x) {
+	/// <param name="x"> The partition value.</param>
+	/// <returns> Pointer to the new head of the partitioned list.</returns>
+	DataNode<T>* partitionList(const T& x) {
 		if (!head) return nullptr;
-		auto beforeList = std::make_unique<DataNode<T>>(-1);
-		auto afterList  = std::make_unique<DataNode<T>>(-1);
+		auto beforeList = std::make_unique<DataNode<T>>(T{});
+		auto afterList = std::make_unique<DataNode<T>>(T{});
 		auto* before = beforeList.get();
 		auto* after  = afterList.get();
 		

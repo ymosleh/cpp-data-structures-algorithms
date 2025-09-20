@@ -59,7 +59,6 @@ int main(int argc, char * argv[]) {
     nums.append(2);
     nums.append(3);
     nums.append(4);
-    //nums.append(5);
     nums.printList();
 
 
@@ -106,6 +105,17 @@ int main(int argc, char * argv[]) {
     ListToPart.partitionList(x);
     std::cout << "Partitioned List based on X: " << x << std::endl;
     ListToPart.printList();
+
+
+    std::cout << "--- Reverse subset of list ---\n";
+    DSLinkedList<int> reverseSubList(1);
+    reverseSubList.append(2);
+    reverseSubList.append(3);
+    reverseSubList.append(4);
+    reverseSubList.append(5);
+    reverseSubList.printList();
+    reverseSubList.reverseSubset(1, 3);
+    reverseSubList.printList();
 
     return 0;
 }

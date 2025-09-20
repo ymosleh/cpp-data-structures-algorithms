@@ -46,6 +46,7 @@ Open `CPP-DSA/CPP-DSA.sln` in Visual Studio and build.
 ### Algorithms
 - **Linked List Algorithms**
   - Reverse list in-place
+  - Reverse subset of list between positions
   - Find middle node (slow/fast pointer technique)
   - Find kth node from end
   - Remove duplicates from sorted list

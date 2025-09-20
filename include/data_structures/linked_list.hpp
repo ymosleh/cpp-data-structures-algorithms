@@ -28,6 +28,13 @@ private:
 	DataNode<T>* tail{nullptr}; // raw pointer, since tail is not responsible for the object lifetime.
 	int length{};
 
+	void relinkTail() {
+		tail = head.get();
+		while (tail && tail->next) {
+			tail = tail->next.get();
+		}
+	}
+
 public:
 	DSLinkedList() : head(nullptr), tail(nullptr), length(0) {}
 
@@ -37,7 +44,6 @@ public:
 		length = 1;
 	}
 
-	// Destructor
 	~DSLinkedList() = default;
 
 	// Copy constructor
@@ -373,7 +379,6 @@ public:
 	}
 
 	/// <summary>
-	/// Implementation for LeetCode problem:
 	/// Given the head of a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
 	/// You should preserve the original relative order of the nodes in each of the two partitions.
 	/// Time: O(N) | Space: O(1)
@@ -404,13 +409,37 @@ public:
 		before->next = std::move(afterList->next); 
 		head = std::move(beforeList->next);
 
-		// recalculate tail pointer here. 
-		tail = head.get();
-		while (tail && tail->next) {
-			tail = tail->next.get();
+		relinkTail();
+		return head.get();
+	}
+
+	/// <summary>
+	/// Reverses the nodes of the list from indices m to n (0-based).
+	/// Time: O(n) | Space: O(1)
+	/// </summary>
+	/// <param name="m"> Starting position to reverse.</param>
+	/// <param name="n"> Ending position. </param>
+	void reverseSubset(int m, int n) {
+		//if (!head || m == n || m > n) return;
+		if (!head || m == n || m < 0 || n < m || n >= length) return;
+
+		auto dummyNode = std::make_unique<DataNode<T>>(T{});
+		dummyNode->next = std::move(head);
+		DataNode<T>* prev = dummyNode.get();
+
+		for (int i = 0; i < m; ++i) {
+			prev = prev->next.get();
 		}
 
-		return head.get();
+		DataNode<T>* current = prev->next.get();
+		for (int i = 0; i < (n-m); ++i) {
+			auto temp = std::move(current->next);
+			current->next = std::move(temp->next);
+			temp->next = std::move(prev->next);
+			prev->next = std::move(temp);
+		}
+		head = std::move(dummyNode->next);
+		relinkTail();
 	}
 
 };

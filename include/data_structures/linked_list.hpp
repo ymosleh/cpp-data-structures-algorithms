@@ -2,18 +2,19 @@
 #include <iostream>
 #include <memory>
 
-/* Linked list template using smart pointers. */ 
+
+// Linked list template using smart pointers.
 
 /// <summary>
 /// Node of a singly linked list.
 /// Owns the next node via unique_ptr to enforce single ownership.
 /// </summary>
-/// <typeparam name="T"> Type stored in the list.</typeparam>
+/// <typeparam name="T"> Type stored in the list. </typeparam>
 template <typename T>
 class DataNode {
 public:
 	T value{};
-	std::unique_ptr<DataNode<T>> next{nullptr};
+	std::unique_ptr<DataNode<T>> next{ nullptr };
 	DataNode(const T& v) : value(v), next(nullptr) {}
 };
 
@@ -24,8 +25,8 @@ public:
 template <typename T>
 class DSLinkedList {
 private:
-	std::unique_ptr<DataNode<T>> head{nullptr};
-	DataNode<T>* tail{nullptr}; // raw pointer, since tail is not responsible for the object lifetime.
+	std::unique_ptr<DataNode<T>> head{ nullptr };
+	DataNode<T>* tail{ nullptr }; // Raw pointer, since tail is not responsible for the object lifetime.
 	int length{};
 
 	void relinkTail() {
@@ -95,7 +96,7 @@ public:
 
 	/// <summary>
 	/// Appends an element to the end of the list in O(1).
-	/// Uses tail pointer for efficiency.
+	/// Uses the tail pointer for efficiency.
 	/// </summary>
 	/// <param name="value"> The value to store in the newly created tail node. </param>
 	void append(const T& value) {
@@ -112,7 +113,7 @@ public:
 	}
 
 	/// <summary>
-	/// Prepend element to the start of the list in O(1).
+	/// Prepends an element to the start of the list in O(1).
 	/// </summary>
 	/// <param name="value"> The value to store in the new head node. </param>
 	void prepend(const T& value) {
@@ -129,16 +130,14 @@ public:
 	}
 
 	/// <summary>
-	/// Delete the last node.
-	/// Traverses the list to find the node before tail O(n).
+	/// Deletes the last node.
+	/// Traverses the list to find the node before the tail. O(n).
 	/// </summary>
 	void deleteLast() {
-		if (!head) {
-			return;
-		}
+		if (!head) return;
 
 		if (!head->next) {
-			head.reset(); // Deletes node and set head to nullptr.
+			head.reset();  // Deletes node and sets head to nullptr.
 			tail = nullptr;
 			length = 0;
 			return;
@@ -154,12 +153,10 @@ public:
 	}
 
 	/// <summary>
-	/// Delete the first node in O(1).
+	/// Deletes the first node in O(1).
 	/// </summary>
 	void deleteFirst() {
-		if (!head) {
-			return;
-		}
+		if (!head) return;
 
 		if (length == 1) {
 			head.reset();
@@ -171,17 +168,14 @@ public:
 		--length;
 	}
 
-
 	/// <summary>
-	/// Returns the node at the given index. Returns nullptr if out of range.
+	/// Returns the node at the given index, or nullptr if out of range.
 	/// Time: O(n).
 	/// </summary>
 	/// <param name="index"> Zero-based index of the node to retrieve. </param>
 	/// <returns> Pointer to the node if valid, otherwise nullptr. </returns>
 	DataNode<T>* get(int index) {
-		if (index < 0 || index >= length) {
-			return nullptr;
-		}
+		if (index < 0 || index >= length) return nullptr;
 
 		auto current = head.get();
 		for (int i = 0; i < index; ++i) {
@@ -190,13 +184,12 @@ public:
 		return current;
 	}
 
-
 	/// <summary>
-	/// Set the value of the node at given index.
+	/// Sets the value of the node at the given index.
 	/// </summary>
 	/// <param name="index"> Zero-based index of the node whose value will be updated. </param>
 	/// <param name="value"> The new value to assign to the node. </param>
-	/// <returns> True if the node value was successfully updated; false if the index was invalid. </returns>
+	/// <returns> True if the node value was updated; false if the index was invalid. </returns>
 	bool set(int index, const T& value) {
 		auto current = get(index);
 		if (current) {
@@ -211,11 +204,10 @@ public:
 	/// </summary>
 	/// <param name="index"> Zero-based position where the new node will be inserted. </param>
 	/// <param name="value"> The value to store in the newly inserted node. </param>
-	/// <returns> True if the node was successfully inserted; false if the index was invalid. </returns>
+	/// <returns> True if the node was inserted; false if the index was invalid. </returns>
 	bool insert(int index, const T& value) {
-		if (index < 0 || index > length) {
-			return false;
-		}
+		if (index < 0 || index > length) return false;
+
 		if (index == 0) {
 			prepend(value);
 			return true;
@@ -235,15 +227,14 @@ public:
 	}
 
 	/// <summary>
-	/// Remove the node at the given index.
-	/// Relinks nodes by reassigning unique_ptr ownership, which automatically deletes the removed node.
+	/// Removes the node at the given index.
+	/// Relinks nodes by transferring unique_ptr ownership, which deletes the removed node.
 	/// Time: O(n).
 	/// </summary>
 	/// <param name="index"> Zero-based index of the node to remove. </param>
 	void removeAt(int index) {
-		if (index < 0 || index >= length) {
-			return;
-		}
+		if (index < 0 || index >= length) return;
+
 		if (index == 0) {
 			deleteFirst();
 			return;
@@ -254,15 +245,14 @@ public:
 		}
 
 		auto prev = get(index - 1);
-		prev->next = std::move(prev->next->next); // Reassigning prev->next destroys the old unique_ptr, automatically deleting the target node.
+		prev->next = std::move(prev->next->next);  // Old node deleted automatically.
 		--length;
 	}
 
+	/// <summary>
+	/// Prints the list contents to stdout in "a -> b -> c" format.
+	/// </summary>
 	void printList() const {
-		if (!head) {
-			return;
-		}
-
 		auto iter = head.get();
 		while (iter) {
 			std::cout << iter->value;
@@ -272,21 +262,26 @@ public:
 		std::cout << std::endl;
 	}
 
+	/// <summary>
+	/// Returns the number of elements in the list.
+	/// </summary>
+	/// <returns> The current list size. </returns>
 	int size() const { return length; }
 
 
-	/*** Linked list Algorithms ***/
+	/*** Linked list algorithms ***/
 
 	/// <summary>
-	/// Reverse the list in-place.
+	/// LeetCode 206. Reverse Linked List.
+	/// Reverses the list in place.
 	/// Time: O(n) | Space: O(1).
 	/// </summary>
 	void reverse() {
 		if (!head || !head->next) return;
 
-		std::unique_ptr<DataNode<T>> prev = nullptr; 
+		std::unique_ptr<DataNode<T>> prev = nullptr;
 		auto current = std::move(head);
-		tail = current.get(); // Remember the old head (which will become the new tail).
+		tail = current.get();  // Old head becomes new tail.
 
 		while (current) {
 			auto nextNode = std::move(current->next);
@@ -298,7 +293,8 @@ public:
 	}
 
 	/// <summary>
-	/// Returns the middle node of the list using the slow/fast pointer technique.
+	/// LeetCode 876. Middle of the Linked List.
+	/// Returns the middle node using the slow/fast pointer technique.
 	/// For even-length lists, returns the second middle node.
 	/// Time: O(n) | Space: O(1).
 	/// </summary>
@@ -316,11 +312,11 @@ public:
 	}
 
 	/// <summary>
-	/// Find the k-th node from the end (tail).
-	/// Constraints: Cannot use length variable.
-	/// Time: O(n).
+	/// Finds the k-th node from the end (tail).
+	/// Constraints: Cannot use the length variable.
+	/// Time: O(n) | Space: O(1).
 	/// </summary>
-	/// <param name="k"> One-based index from the end (k = 1 returns the last node, k = 2 the second to last, etc.). </param>
+	/// <param name="k"> One-based index from the end (k=1 returns the last node). </param>
 	/// <returns> Pointer to the node if valid; otherwise nullptr. </returns>
 	DataNode<T>* findKthNodeFromEnd(int k) {
 		if (k <= 0 || !head) return nullptr;
@@ -328,7 +324,7 @@ public:
 		auto* fast = head.get();
 		auto* slow = head.get();
 
-		// Move fast 'k' steps ahead. When fast gets to end of list slow will be pointing to the kth element from the end.
+		// Move fast k steps ahead
 		for (int i = 0; i < k; ++i) {
 			if (!fast) return nullptr;
 			fast = fast->next.get();
@@ -342,59 +338,61 @@ public:
 	}
 
 	/// <summary>
-	/// Removes all duplicate nodes such that each element appears only once.
-	/// Time: O(N) | Space O(1)
+	/// LeetCode 83. Remove Duplicates from Sorted List.
+	/// Removes duplicates so each element appears once.
+	/// Time: O(n) | Space: O(1).
 	/// </summary>
 	void removeDuplicatesFromSortedList() {
 		auto* current = head.get();
 		while (current && current->next) {
 			if (current->value == current->next->value) {
-				std::unique_ptr<DataNode<T>> temp = std::move(current->next); // Take ownership of duplicate node to delete.
+				auto temp = std::move(current->next);  // Take ownership of duplicate node.
 				current->next = std::move(temp->next);
 				--length;
-				// Update tail pointer if we removed the tail node
-				if (!current->next) {
-					tail = current;
-				}
-			} else {
+				if (!current->next) tail = current;
+			}
+			else {
 				current = current->next.get();
 			}
 		}
 	}
 
 	/// <summary>
-	/// Converts binary sequence into a decimal value.
-	/// Constraints: Each node's value is either 0 or 1.
-	/// Time: O(N) | Space: O(1)
+	/// LeetCode 1290. Convert Binary Number in a Linked List to Integer.
+	/// Converts binary sequence to a decimal value.
+	/// Constraint: Each node's value must be 0 or 1.
+	/// Time: O(n) | Space: O(1).
 	/// </summary>
-	/// <returns> The decimal representation of the binary sequence.</returns>
+	/// <returns> The decimal representation of the binary sequence. </returns>
 	int binaryToDecimal() {
 		int result = 0;
 		auto* current = head.get();
 		while (current) {
-			result = result << 1 | current->value;
+			result = (result << 1) | current->value;
 			current = current->next.get();
 		}
 		return result;
 	}
 
 	/// <summary>
-	/// Given the head of a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
-	/// You should preserve the original relative order of the nodes in each of the two partitions.
-	/// Time: O(N) | Space: O(1)
+	/// LeetCode 86. Partition List.
+	/// Partitions the list so all nodes less than x come before nodes greater than or equal to x.
+	/// Preserves relative order in both partitions.
+	/// Time: O(n) | Space: O(1).
 	/// </summary>
-	/// <param name="x"> The partition value.</param>
-	/// <returns> Pointer to the new head of the partitioned list.</returns>
+	/// <param name="x"> The partition value. </param>
+	/// <returns> Pointer to the new head of the partitioned list. </returns>
 	DataNode<T>* partitionList(const T& x) {
 		if (!head) return nullptr;
+
 		auto beforeList = std::make_unique<DataNode<T>>(T{});
 		auto afterList = std::make_unique<DataNode<T>>(T{});
 		auto* before = beforeList.get();
-		auto* after  = afterList.get();
-		
-		auto current = std::move(head); // Take ownership of head since we need to detach and reattach nodes.
+		auto* after = afterList.get();
+
+		auto current = std::move(head);
 		while (current) {
-			auto nextNode = std::move(current->next); // save next pointer that links to the rest of the list.
+			auto nextNode = std::move(current->next);
 			if (current->value < x) {
 				before->next = std::move(current);
 				before = before->next.get();
@@ -403,10 +401,11 @@ public:
 				after->next = std::move(current);
 				after = after->next.get();
 			}
-			current = std::move(nextNode); 
+			current = std::move(nextNode);
 		}
-		after->next = nullptr; // cut off "after list" to avoid cycles.
-		before->next = std::move(afterList->next); 
+
+		after->next = nullptr;
+		before->next = std::move(afterList->next);
 		head = std::move(beforeList->next);
 
 		relinkTail();
@@ -414,33 +413,60 @@ public:
 	}
 
 	/// <summary>
-	/// Reverses the nodes of the list from indices m to n (0-based).
-	/// Time: O(n) | Space: O(1)
+	/// LeetCode 92. Reverse Linked List II.
+	/// Reverses the nodes from indices m to n (0-based).
+	/// Time: O(n) | Space: O(1).
 	/// </summary>
-	/// <param name="m"> Starting position to reverse.</param>
-	/// <param name="n"> Ending position. </param>
+	/// <param name="m"> Start index of the reversal. </param>
+	/// <param name="n"> End index of the reversal. </param>
 	void reverseSubset(int m, int n) {
-		//if (!head || m == n || m > n) return;
 		if (!head || m == n || m < 0 || n < m || n >= length) return;
 
-		auto dummyNode = std::make_unique<DataNode<T>>(T{});
-		dummyNode->next = std::move(head);
-		DataNode<T>* prev = dummyNode.get();
+		DataNode<T> dummyNode(T{});
+		dummyNode.next = std::move(head);
+		auto* prev = &dummyNode;
 
 		for (int i = 0; i < m; ++i) {
 			prev = prev->next.get();
 		}
 
-		DataNode<T>* current = prev->next.get();
-		for (int i = 0; i < (n-m); ++i) {
+		auto* current = prev->next.get();
+		for (int i = 0; i < (n - m); ++i) {
 			auto temp = std::move(current->next);
 			current->next = std::move(temp->next);
 			temp->next = std::move(prev->next);
 			prev->next = std::move(temp);
 		}
-		head = std::move(dummyNode->next);
+		head = std::move(dummyNode.next);
 		relinkTail();
 	}
 
-};
+	/// <summary>
+	/// LeetCode 24. Swap Nodes in Pairs.
+	/// Swaps every two adjacent nodes without modifying values.
+	/// Time: O(n) | Space: O(1).
+	/// </summary>
+	void swapPairs() {
+		DataNode<T> dummyNode(T{});
+		dummyNode.next = std::move(head);
 
+		auto* prev = &dummyNode;
+		auto* first = prev->next.get();
+
+		while (first && first->next) {
+			auto second = std::move(first->next);
+
+			// Perform swap
+			first->next = std::move(second->next);
+			second->next = std::move(prev->next);
+			prev->next = std::move(second);
+
+			// Move pointers
+			prev = first;
+			first = first->next.get();
+		}
+
+		head = std::move(dummyNode.next);
+		relinkTail();
+	}
+};

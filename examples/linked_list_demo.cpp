@@ -117,6 +117,17 @@ int main(int argc, char * argv[]) {
     reverseSubList.reverseSubset(1, 3);
     reverseSubList.printList();
 
+    std::cout << "--- Swap Nodes in Pairs ---\n";
+    DSLinkedList<int> swapList(1);
+    swapList.append(2);
+    swapList.append(3);
+    swapList.append(4);
+    swapList.append(5);
+    swapList.printList();
+    swapList.swapPairs();
+    swapList.printList();
+
+
     return 0;
 }
 

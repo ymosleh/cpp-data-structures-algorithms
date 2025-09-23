@@ -1,29 +1,27 @@
 #pragma once
 #include <iostream>
 
-/*
-  Since our linked list uses smart pointers (unique_ptr), it enforces an acyclic structure.
-  This makes it tricky to introduce cycles for testing.
-  Therefore, this separate implementation uses raw pointers to create and test linked lists with cycles.
-*/
-
+// Since the smart-pointer-based linked list enforces an acyclic structure,
+// it is difficult to create cycles for testing.
+// This separate implementation uses raw pointers to construct lists with cycles
+// and to test cycle detection algorithms.
 
 /// <summary>
-/// Simple node structure for a raw-pointer linked list, 
+/// Simple node structure for a raw-pointer linked list,
 /// used to test cycle detection.
 /// </summary>
 struct TestNode {
     int value;
     TestNode* next;
-    TestNode(int v) : value(v), next(nullptr) {}
+    explicit TestNode(int v) : value(v), next(nullptr) {}
 };
 
 /// <summary>
 /// Detects whether the linked list contains a cycle using the slow/fast pointer technique.
-/// Time: O(N) | Space O(1)
+/// Time: O(n) | Space: O(1).
 /// </summary>
 /// <param name="head"> Pointer to the head of the list. </param>
-/// <returns> True if a cycle is detected; otherwise false. </returns>
+/// <returns> True if a cycle is detected; otherwise, false. </returns>
 inline bool hasCycle(TestNode* head) {
     if (!head || !head->next) return false;
 
@@ -39,8 +37,8 @@ inline bool hasCycle(TestNode* head) {
 }
 
 /// <summary>
-/// Small test harness for demonstrating cycle detection.
-/// Creates a list, tests without a cycle, then introduces one.
+/// Demonstrates cycle detection by creating a list,
+/// testing it without a cycle, then introducing one.
 /// </summary>
 inline void testCycleDetection() {
     // Create test nodes with raw pointers
@@ -49,20 +47,20 @@ inline void testCycleDetection() {
     TestNode* node3 = new TestNode(3);
     TestNode* node4 = new TestNode(4);
 
-    // Link them
+    // Link them linearly
     node1->next = node2;
     node2->next = node3;
     node3->next = node4;
 
-    std::cout << "--- Cycle detection ---\n";
-    std::cout << "No cycle: " << hasCycle(node1) << std::endl;
+    std::cout << "--- Cycle detection demo ---\n";
+    std::cout << "No cycle: " << std::boolalpha << hasCycle(node1) << std::endl;
 
-    // Create cycle
-    node4->next = node2; // Cycle back to node2
+    // Introduce a cycle (node4 points back to node2)
+    node4->next = node2;
 
-    std::cout << "With cycle: " << hasCycle(node1) << std::endl;
+    std::cout << "With cycle: " << std::boolalpha << hasCycle(node1) << std::endl;
 
-    // Clean up: break cycle before deleting nodes.
+    // Break the cycle before cleanup
     node4->next = nullptr;
     delete node1;
     delete node2;

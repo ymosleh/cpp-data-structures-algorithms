@@ -52,4 +52,5 @@ Open `CPP-DSA/CPP-DSA.sln` in Visual Studio and build.
   - Remove duplicates from sorted list
   - Binary to decimal conversion
   - List partitioning
+  - Swap nodes in Pairs
   - Cycle detection (in test utilities)
